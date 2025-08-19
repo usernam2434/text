@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThreadMaster - 高端T恤专卖</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a365d',
+                        secondary: '#f97316',
+                        neutral: {
+                            100: '#f3f4f6',
+                            200: '#e5e7eb',
+                            300: '#d1d5db',
+                            400: '#9ca3af',
+                            500: '#6b7280',
+                            600: '#4b5563',
+                            700: '#374151',
+                            800: '#1f2937',
+                            900: '#111827',
+                        }
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .hover-lift {
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .hover-lift:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+            .scroll-smooth {
+                scroll-behavior: smooth;
+            }
+            .search-input-focus {
+                @apply focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent;
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-neutral-100 text-neutral-800 scroll-smooth">
+    <!-- 导航栏 -->
+    <header id="navbar" class="fixed w-full top-0 z-50 transition-all duration-300 bg-white/90 backdrop-blur-sm shadow-sm">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <a href="#" class="flex items-center space-x-2">
+                    <span class="text-primary text-2xl font-bold">Thread<span class="text-secondary">Master</span></span>
+                </a>
+
+                <!-- 桌面导航 -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="font-medium text-primary hover:text-secondary transition-colors">首页</a>
+                    <a href="#collection" class="font-medium text-neutral-600 hover:text-secondary transition-colors">T恤系列</a>
+                    <a href="#featured" class="font-medium text-neutral-600 hover:text-secondary transition-colors">精选款式</a>
+                    <a href="#about" class="font-medium text-neutral-600 hover:text-secondary transition-colors">关于我们</a>
+                </nav>
+
+                <!-- 用户功能区 -->
+                <div class="flex items-center space-x-4">
+                    <!-- 模糊搜索组件 - 桌面版 -->
+                    <div class="hidden md:flex items-center relative w-64">
+                        <input
+                            type="text"
+                            id="desktop-search-input"
+                            placeholder="搜索T恤款式..."
+                            class="w-full pl-10 pr-4 py-2 rounded-full border border-neutral-300 search-input-focus transition-all"
+                        >
+                        <i class="fa fa-search absolute left-3 text-neutral-500"></i>
+                        <button id="desktop-search-btn" class="absolute right-3 text-neutral-600 hover:text-secondary transition-colors">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <button class="p-2 text-neutral-600 hover:text-secondary transition-colors">
+                        <i class="fa fa-user text-lg"></i>
+                    </button>
+                    <button class="p-2 text-neutral-600 hover:text-secondary transition-colors relative">
+                        <i class="fa fa-shopping-bag text-lg"></i>
+                        <span class="absolute -top-1 -right-1 bg-secondary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                    </button>
+                    <button class="md:hidden p-2 text-neutral-600 hover:text-secondary transition-colors" id="mobile-menu-button">
+                        <i class="fa fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 模糊搜索组件 - 移动端（单独行显示） -->
+            <div class="md:hidden flex items-center relative mb-3">
+                <input
+                    type="text"
+                    id="mobile-search-input"
+                    placeholder="搜索T恤款式..."
+                    class="w-full pl-10 pr-4 py-2 rounded-full border border-neutral-300 search-input-focus transition-all"
+                >
+                <i class="fa fa-search absolute left-3 text-neutral-500"></i>
+                <button id="mobile-search-btn" class="absolute right-3 text-neutral-600 hover:text-secondary transition-colors">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+
+            <!-- 移动端导航菜单 -->
+            <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+                <div class="container mx-auto px-4 py-3 space-y-3">
+                    <a href="#" class="block py-2 font-medium text-primary">首页</a>
+                    <a href="#collection" class="block py-2 font-medium text-neutral-600 hover:text-secondary transition-colors">T恤系列</a>
+                    <a href="#featured" class="block py-2 font-medium text-neutral-600 hover:text-secondary transition-colors">精选款式</a>
+                    <a href="#about" class="block py-2 font-medium text-neutral-600 hover:text-secondary transition-colors">关于我们</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 英雄区域 -->
+    <section class="pt-24 md:pt-32 pb-16 md:pb-24 bg-gradient-to-br from-primary/5 to-primary/10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 md:pr-12 mb-10 md:mb-0">
+                    <h1 class="text-[clamp(2.5rem,5vw,4rem)] font-bold leading-tight text-primary mb-6">
+                        重新定义<br>
+                        <span class="text-secondary">舒适与风格</span>
+                    </h1>
+                    <p class="text-lg text-neutral-600 mb-8 max-w-lg">
+                        精选优质面料，匠心工艺打造，每一件T恤都是对品质生活的诠释。
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#collection" class="px-8 py-3 bg-secondary text-white font-medium rounded-md hover:bg-secondary/90 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 duration-300">
+                            浏览系列
+                        </a>
+                        <a href="#about" class="px-8 py-3 bg-transparent border border-primary text-primary font-medium rounded-md hover:bg-primary/5 transition-colors">
+                            了解更多
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 relative">
+                    <div class="relative z-10 rounded-lg overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                        <img src="img/1c493eece46a40e089de47faefa37bd7-goods.jpeg" alt="高端T恤展示" class="w-full h-auto object-cover">
+                    </div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-secondary/20 rounded-lg -z-10"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 分类筛选 -->
+    <section id="collection" class="py-16 bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-primary mb-4">T恤系列</h2>
+                <p class="text-neutral-600 max-w-2xl mx-auto">探索我们精心设计的T恤系列，从简约基础款到限量设计师合作款，总有一款适合你。</p>
+                <!-- 搜索结果提示（默认隐藏） -->
+                <div id="search-result-notice" class="hidden mt-4 text-neutral-600">
+                    <span id="result-count" class="font-medium text-secondary"></span>
+                </div>
+            </div>
+
+            <!-- 筛选选项 -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button class="px-6 py-2 bg-primary text-white rounded-full font-medium filter-btn" data-filter="all">全部</button>
+                <button class="px-6 py-2 bg-neutral-100 text-neutral-600 rounded-full font-medium hover:bg-neutral-200 transition-colors filter-btn" data-filter="basic">基础款</button>
+                <button class="px-6 py-2 bg-neutral-100 text-neutral-600 rounded-full font-medium hover:bg-neutral-200 transition-colors filter-btn" data-filter="print">印花款</button>
+                <button class="px-6 py-2 bg-neutral-100 text-neutral-600 rounded-full font-medium hover:bg-neutral-200 transition-colors filter-btn" data-filter="designer">设计师合作款</button>
+                <button class="px-6 py-2 bg-neutral-100 text-neutral-600 rounded-full font-medium hover:bg-neutral-200 transition-colors filter-btn" data-filter="organic">有机棉系列</button>
+                <button class="px-6 py-2 bg-neutral-100 text-neutral-600 rounded-full font-medium hover:bg-neutral-200 transition-colors filter-btn" data-filter="limited">限量款</button>
+                <!-- 重置搜索按钮（默认隐藏） -->
+                <button id="reset-search-btn" class="hidden px-6 py-2 bg-red-50 text-red-600 rounded-full font-medium hover:bg-red-100 transition-colors">
+                    <i class="fa fa-times mr-1"></i> 重置搜索
+                </button>
+            </div>
+
+            <!-- 产品网格 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8" id="product-grid">
+                <!-- 产品1 - 基础款 -->
+                <div class="group product-card" data-categories="basic" data-title="经典纯色纯棉T恤">
+                    <a href="./product-detail.html#id=1" class="block">
+                        <div class="relative overflow-hidden rounded-lg mb-4 hover-lift">
+                            <img src="img/0ede5b5d759949d7a572ce3e5a1e35f0-goods.jpeg" alt="经典纯色纯棉T恤" class="w-full h-[350px] object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute top-3 left-3">
+                                <span class="bg-secondary text-white text-sm font-medium px-3 py-1 rounded-full">热销</span>
+                            </div>
+                            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 p-4">
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-heart"></i>
+                                </button>
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-shopping-bag"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="font-medium text-lg text-neutral-800 mb-1 group-hover:text-secondary transition-colors">经典纯色纯棉T恤</h3>
+                        <p class="text-neutral-500 text-sm mb-2">白色 / 黑色 / 灰色</p>
+                        <div class="flex items-center justify-between">
+                            <span class="font-semibold text-primary">¥199</span>
+                            <div class="flex">
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star-half-o text-yellow-400"></i>
+                                <span class="text-xs text-neutral-500 ml-1">(128)</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 产品2 - 印花款/新品 -->
+                <div class="group product-card" data-categories="print" data-title="城市天际线印花T恤">
+                    <a href="./product-detail.html#id=2" class="block">
+                        <div class="relative overflow-hidden rounded-lg mb-4 hover-lift">
+                            <img src="img/0eaf61df-8a69-464e-a48c-5c21519ad84f.jpg" alt="城市天际线印花T恤" class="w-full h-[350px] object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute top-3 left-3">
+                                <span class="bg-primary text-white text-sm font-medium px-3 py-1 rounded-full">新品</span>
+                            </div>
+                            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 p-4">
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-heart"></i>
+                                </button>
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-shopping-bag"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="font-medium text-lg text-neutral-800 mb-1 group-hover:text-secondary transition-colors">城市天际线印花T恤</h3>
+                        <p class="text-neutral-500 text-sm mb-2">深蓝色 / 藏青色</p>
+                        <div class="flex items-center justify-between">
+                            <span class="font-semibold text-primary">¥259</span>
+                            <div class="flex">
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <span class="text-xs text-neutral-500 ml-1">(42)</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 产品3 - 基础款 -->
+                <div class="group product-card" data-categories="basic" data-title="极简主义设计T恤">
+                   <a href="./product-detail.html#id=3" class="block">
+                        <div class="relative overflow-hidden rounded-lg mb-4 hover-lift">
+                            <img src="img/00f16df0-1333-49b4-988a-d35f6dc892f2.jpg" alt="极简主义设计T恤" class="w-full h-[350px] object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 p-4">
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-heart"></i>
+                                </button>
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-shopping-bag"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="font-medium text-lg text-neutral-800 mb-1 group-hover:text-secondary transition-colors">极简主义设计T恤</h3>
+                        <p class="text-neutral-500 text-sm mb-2">燕麦色 / 浅灰色</p>
+                        <div class="flex items-center justify-between">
+                            <span class="font-semibold text-primary">¥229</span>
+                            <div class="flex">
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star-o text-yellow-400"></i>
+                                <span class="text-xs text-neutral-500 ml-1">(86)</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 产品4 - 设计师合作款/限量款 -->
+                <div class="group product-card" data-categories="designer limited" data-title="艺术家合作系列T恤">
+                   <a href="./product-detail.html#id=4" class="block">
+                        <div class="relative overflow-hidden rounded-lg mb-4 hover-lift">
+                            <img src="img/0b0c797aa0154ad5a2acb9877ae84fd4-goods.jpeg" alt="艺术家合作系列T恤" class="w-full h-[350px] object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute top-3 left-3">
+                                <span class="bg-red-500 text-white text-sm font-medium px-3 py-1 rounded-full">限量</span>
+                            </div>
+                            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 p-4">
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-heart"></i>
+                                </button>
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-shopping-bag"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="font-medium text-lg text-neutral-800 mb-1 group-hover:text-secondary transition-colors">艺术家合作系列T恤</h3>
+                        <p class="text-neutral-500 text-sm mb-2">多色拼接</p>
+                        <div class="flex items-center justify-between">
+                            <span class="font-semibold text-primary">¥329</span>
+                            <div class="flex">
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star-half-o text-yellow-400"></i>
+                                <span class="text-xs text-neutral-500 ml-1">(54)</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 产品5 - 有机棉系列/基础款 -->
+                <div class="group product-card" data-categories="organic basic" data-title="有机棉基础款T恤">
+                    <a href="./product-detail.html#id=5" class="block">
+                        <div class="relative overflow-hidden rounded-lg mb-4 hover-lift">
+                            <img src="img/0add111542a744518a8ec1c9d4393740-goods.png" alt="有机棉基础款T恤" class="w-full h-[350px] object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 p-4">
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-heart"></i>
+                                </button>
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-shopping-bag"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="font-medium text-lg text-neutral-800 mb-1 group-hover:text-secondary transition-colors">有机棉基础款T恤</h3>
+                        <p class="text-neutral-500 text-sm mb-2">自然白 / 棕色</p>
+                        <div class="flex items-center justify-between">
+                            <span class="font-semibold text-primary">¥249</span>
+                            <div class="flex">
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star-o text-yellow-400"></i>
+                                <span class="text-xs text-neutral-500 ml-1">(92)</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 产品6 - 印花款/热销 -->
+                <div class="group product-card" data-categories="print" data-title="复古风印花T恤">
+                    <a href="product-detail.html#id=6" class="block">
+                        <div class="relative overflow-hidden rounded-lg mb-4 hover-lift">
+                            <img src="img/1f3fbf77-866c-4677-9da4-b7be7a09cff5.jpeg" alt="复古风印花T恤" class="w-full h-[350px] object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute top-3 left-3">
+                                <span class="bg-secondary text-white text-sm font-medium px-3 py-1 rounded-full">热销</span>
+                            </div>
+                            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 p-4">
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-heart"></i>
+                                </button>
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-shopping-bag"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="font-medium text-lg text-neutral-800 mb-1 group-hover:text-secondary transition-colors">复古风印花T恤</h3>
+                        <p class="text-neutral-500 text-sm mb-2">靛蓝色 / 军绿色</p>
+                        <div class="flex items-center justify-between">
+                            <span class="font-semibold text-primary">¥279</span>
+                            <div class="flex">
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <span class="text-xs text-neutral-500 ml-1">(156)</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 产品7 - 基础款 -->
+                <div class="group product-card" data-categories="basic" data-title="条纹经典款T恤">
+                   <a href="./product-detail.html#id=7" class="block">
+                        <div class="relative overflow-hidden rounded-lg mb-4 hover-lift">
+                            <img src="img/1c493eece46a40e089de47faefa37bd7-goods.jpeg" alt="条纹经典款T恤" class="w-full h-[350px] object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 p-4">
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-heart"></i>
+                                </button>
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-shopping-bag"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="font-medium text-lg text-neutral-800 mb-1 group-hover:text-secondary transition-colors">条纹经典款T恤</h3>
+                        <p class="text-neutral-500 text-sm mb-2">蓝白条纹 / 灰白条纹</p>
+                        <div class="flex items-center justify-between">
+                            <span class="font-semibold text-primary">¥219</span>
+                            <div class="flex">
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star-half-o text-yellow-400"></i>
+                                <i class="fa fa-star-o text-yellow-400"></i>
+                                <span class="text-xs text-neutral-500 ml-1">(67)</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 产品8 - 基础款/运动风 -->
+                <div class="group product-card" data-categories="basic" data-title="运动风格T恤">
+                    <a href="./product-detail.html#id=8" class="block">
+                        <div class="relative overflow-hidden rounded-lg mb-4 hover-lift">
+                            <img src="img/0eaf61df-8a69-464e-a48c-5c21519ad84f.jpg" alt="运动风格T恤" class="w-full h-[350px] object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute top-3 left-3">
+                                <span class="bg-primary text-white text-sm font-medium px-3 py-1 rounded-full">新品</span>
+                            </div>
+                            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 p-4">
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-heart"></i>
+                                </button>
+                                <button class="bg-white text-neutral-800 p-3 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa fa-shopping-bag"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="font-medium text-lg text-neutral-800 mb-1 group-hover:text-secondary transition-colors">运动风格T恤</h3>
+                        <p class="text-neutral-500 text-sm mb-2">黑色 / 深蓝色</p>
+                        <div class="flex items-center justify-between">
+                            <span class="font-semibold text-primary">¥289</span>
+                            <div class="flex">
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star text-yellow-400"></i>
+                                <i class="fa fa-star-o text-yellow-400"></i>
+                                <span class="text-xs text-neutral-500 ml-1">(29)</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 无搜索结果提示（默认隐藏） -->
+            <div id="no-result" class="hidden text-center py-16">
+                <div class="inline-block p-4 bg-neutral-100 rounded-full mb-4">
+                    <i class="fa fa-search text-3xl text-neutral-400"></i>
+                </div>
+                <h3 class="text-xl font-medium text-neutral-800 mb-2">未找到相关商品</h3>
+                <p class="text-neutral-500">请尝试其他搜索关键词或筛选条件</p>
+            </div>
+
+            <!-- 加载更多按钮 -->
+            <div class="text-center mt-12">
+                <button class="px-8 py-3 bg-white border border-primary text-primary font-medium rounded-md hover:bg-primary hover:text-white transition-colors shadow-sm hover:shadow">
+                    加载更多 <i class="fa fa-angle-down ml-1"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 精选款式 -->
+    <section id="featured" class="py-16 bg-neutral-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-primary mb-4">精选款式</h2>
+                <p class="text-neutral-600 max-w-2xl mx-auto">我们的编辑精心挑选，这些T恤不仅舒适耐穿，更是时尚搭配的不二之选。</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- 精选1 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg flex flex-col md:flex-row hover-lift">
+                    <div class="md:w-1/2">
+                        <img src="img/2bbec28f-9f4a-4bc0-9884-6f39e7d3c0c9.jpg" alt="限量版艺术家合作系列" class="w-full h-full object-cover">
+                    </div>
+                    <div class="md:w-1/2 p-6 md:p-8 flex flex-col justify-center">
+                        <span class="text-secondary font-medium mb-2">限量系列</span>
+                        <h3 class="text-2xl font-bold text-primary mb-3">限量版艺术家合作系列</h3>
+                        <p class="text-neutral-600 mb-6">与国际知名艺术家联手打造，每一件都是艺术品。全球限量发售，收藏价值极高。</p>
+                        <div class="flex items-center justify-between mt-auto">
+                            <span class="text-xl font-bold text-primary">¥459</span>
+                            <a href="product-detail.html#id=9" class="px-6 py-2 bg-primary text-white font-medium rounded-md hover:bg-primary/90 transition-colors">
+                                立即查看
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 精选2 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg flex flex-col md:flex-row hover-lift">
+                    <div class="md:w-1/2">
+                        <img src="img/1aa890edc6e74fa3ae8dd625048fc02b-goods.jpeg" alt="有机棉环保系列" class="w-full h-full object-cover">
+                    </div>
+                    <div class="md:w-1/2 p-6 md:p-8 flex flex-col justify-center">
+                        <span class="text-green-600 font-medium mb-2">环保系列</span>
+                        <h3 class="text-2xl font-bold text-primary mb-3">有机棉环保系列</h3>
+                        <p class="text-neutral-600 mb-6">采用100%有机棉制作，无化学添加剂，对环境友好。柔软舒适，适合敏感肌肤。</p>
+                        <div class="flex items-center justify-between mt-auto">
+                            <span class="text-xl font-bold text-primary">¥299</span>
+                            <a href="product-detail.html#id=10" class="px-6 py-2 bg-primary text-white font-medium rounded-md hover:bg-primary/90 transition-colors">
+                                立即查看
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 品牌优势 -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa fa-leaf text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-primary mb-2">优质面料</h3>
+                    <p class="text-neutral-600">精选全球优质棉花，柔软透气，舒适亲肤</p>
+                </div>
+
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa fa-certificate text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-primary mb-2">匠心工艺</h3>
+                    <p class="text-neutral-600">精湛缝制工艺，耐穿不变形，细节彰显品质</p>
+                </div>
+
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa fa-paint-brush text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-primary mb-2">独特设计</h3>
+                    <p class="text-neutral-600">国际设计师团队打造，时尚与舒适并存</p>
+                </div>
+
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa fa-truck text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-primary mb-2">快速配送</h3>
+                    <p class="text-neutral-600">全国配送，7天无理由退换，购物无忧</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section id="about" class="py-16 bg-gradient-to-br from-primary/5 to-primary/10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <div class="lg:w-1/2">
+                    <img src="https://picsum.photos/id/328/800/600" alt="ThreadMaster品牌故事" class="w-full h-auto rounded-lg shadow-xl">
+                </div>
+                <div class="lg:w-1/2">
+                    <span class="text-secondary font-medium">关于我们</span>
+                    <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-primary mb-6">专注T恤，<br>不止于舒适</h2>
+                    <p class="text-neutral-600 mb-4">ThreadMaster 成立于2010年，是一家专注于高品质T恤设计与制作的企业。我们相信，一件好的T恤不仅是日常穿着的基础，更是个人风格的表达。</p>
+                    <p class="text-neutral-600 mb-6">十余年来，我们坚持选用全球优质面料，与国际设计师合作，不断创新工艺，致力于为消费者提供舒适、时尚、耐穿的T恤产品。</p>
+                    <a href="#" class="inline-flex items-center text-primary font-medium hover:text-secondary transition-colors">
+                        了解更多品牌故事 <i class="fa fa-long-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 订阅区域 -->
+    <section class="py-16 bg-primary">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-white mb-4">订阅获取最新资讯</h2>
+                <p class="text-white/80 mb-8">第一时间获取新品发布、限时优惠和独家活动信息</p>
+                <form class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
+                    <input type="email" placeholder="请输入您的邮箱地址" class="flex-1 px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary">
+                    <button type="submit" class="px-6 py-3 bg-secondary text-white font-medium rounded-md hover:bg-secondary/90 transition-colors whitespace-nowrap">
+                        立即订阅
+                    </button>
+                </form>
+                <p class="text-white/60 text-sm mt-4">我们尊重您的隐私，不会向第三方分享您的信息</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-neutral-800 text-white pt-16 pb-8">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h3 class="text-2xl font-bold mb-6">Thread<span class="text-secondary">Master</span></h3>
+                    <p class="text-neutral-400 mb-6">专注高品质T恤，为您的日常穿搭增添质感与风格。</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-neutral-700 flex items-center justify-center hover:bg-secondary transition-colors">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-neutral-700 flex items-center justify-center hover:bg-secondary transition-colors">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-neutral-700 flex items-center justify-center hover:bg-secondary transition-colors">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-neutral-700 flex items-center justify-center hover:bg-secondary transition-colors">
+                            <i class="fa fa-pinterest"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">快速链接</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-neutral-400 hover:text-secondary transition-colors">首页</a></li>
+                        <li><a href="#collection" class="text-neutral-400 hover:text-secondary transition-colors">T恤系列</a></li>
+                        <li><a href="#featured" class="text-neutral-400 hover:text-secondary transition-colors">精选款式</a></li>
+                        <li><a href="#about" class="text-neutral-400 hover:text-secondary transition-colors">关于我们</a></li>
+                        <li><a href="#" class="text-neutral-400 hover:text-secondary transition-colors">联系我们</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">客户服务</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-neutral-400 hover:text-secondary transition-colors">配送信息</a></li>
+                        <li><a href="#" class="text-neutral-400 hover:text-secondary transition-colors">退换政策</a></li>
+                        <li><a href="#" class="text-neutral-400 hover:text-secondary transition-colors">尺码指南</a></li>
+                        <li><a href="#" class="text-neutral-400 hover:text-secondary transition-colors">常见问题</a></li>
+                        <li><a href="#" class="text-neutral-400 hover:text-secondary transition-colors">隐私政策</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">联系我们</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa fa-map-marker text-secondary mt-1 mr-3"></i>
+                            <span class="text-neutral-400">上海市浦东新区张江高科技园区博云路2号</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-phone text-secondary mr-3"></i>
+                            <span class="text-neutral-400">400-888-9999</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-envelope text-secondary mr-3"></i>
+                            <span class="text-neutral-400">info@threadmaster.com</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-clock-o text-secondary mr-3"></i>
+                            <span class="text-neutral-400">周一至周日 9:00-21:00</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-neutral-700 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-neutral-500 text-sm mb-4 md:mb-0">© 三只鹭（厦门）文化科技有限公司</p>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-neutral-500 text-sm hover:text-secondary transition-colors">使用条款</a>
+                        <a href="#" class="text-neutral-500 text-sm hover:text-secondary transition-colors">隐私政策</a>
+                        <a href="#" class="text-neutral-500 text-sm hover:text-secondary transition-colors">Cookie 政策</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="back-to-top" class="fixed bottom-6 right-6 w-12 h-12 bg-secondary text-white rounded-full shadow-lg flex items-center justify-center opacity-0 invisible transition-all duration-300 hover:bg-primary">
+        <i class="fa fa-chevron-up"></i>
+    </button>
+
+    <!-- JavaScript -->
+    <script>
+        // 移动端菜单切换
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 导航栏滚动效果
+        const navbar = document.getElementById('navbar');
+        const backToTop = document.getElementById('back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('py-2', 'shadow');
+                navbar.classList.remove('py-4');
+
+                backToTop.classList.remove('opacity-0', 'invisible');
+                backToTop.classList.add('opacity-100', 'visible');
+            } else {
+                navbar.classList.add('py-4');
+                navbar.classList.remove('py-2', 'shadow');
+
+                backToTop.classList.add('opacity-0', 'invisible');
+                backToTop.classList.remove('opacity-100', 'visible');
+            }
+        });
+
+        // 返回顶部功能
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // 产品卡片动画效果
+        document.querySelectorAll('.group').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.add('scale-[1.02]', 'transition-transform', 'duration-300');
+            });
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('scale-[1.02]');
+            });
+        });
+
+        // 筛选按钮交互
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 移除所有按钮的激活状态
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-primary', 'text-white');
+                    b.classList.add('bg-neutral-100', 'text-neutral-600');
+                });
+                // 给当前点击按钮添加激活状态
+                btn.classList.remove('bg-neutral-100', 'text-neutral-600');
+                btn.classList.add('bg-primary', 'text-white');
+
+                const filterValue = btn.getAttribute('data-filter');
+                const productCards = document.querySelectorAll('.product-card');
+                const noResult = document.getElementById('no-result');
+                const productGrid = document.getElementById('product-grid');
+                let visibleCount = 0;
+
+                // 筛选逻辑（结合当前搜索关键词）
+                const searchInput = document.getElementById('desktop-search-input').value.trim().toLowerCase() ||
+                                    document.getElementById('mobile-search-input').value.trim().toLowerCase();
+
+                productCards.forEach(card => {
+                    const cardCategories = card.getAttribute('data-categories');
+                    const cardTitle = card.getAttribute('data-title').toLowerCase();
+                    const matchesFilter = filterValue === 'all' || cardCategories.includes(filterValue);
+                    const matchesSearch = !searchInput || cardTitle.includes(searchInput);
+
+                    if (matchesFilter && matchesSearch) {
+                        card.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+
+                // 显示/隐藏无结果提示
+                if (visibleCount === 0) {
+                    noResult.classList.remove('hidden');
+                    productGrid.classList.add('opacity-50');
+                } else {
+                    noResult.classList.add('hidden');
+                    productGrid.classList.remove('opacity-50');
+                }
+
+                // 更新搜索结果计数（如果有搜索关键词）
+                if (searchInput) {
+                    document.getElementById('result-count').textContent = `找到 ${visibleCount} 件与"${searchInput}"相关的商品（${btn.textContent}）`;
+                }
+            });
+        });
+
+        // 关闭移动端菜单（点击导航项后关闭）
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // ---------------------- 模糊搜索核心功能 ----------------------
+        const desktopSearchInput = document.getElementById('desktop-search-input');
+        const mobileSearchInput = document.getElementById('mobile-search-input');
+        const desktopSearchBtn = document.getElementById('desktop-search-btn');
+        const mobileSearchBtn = document.getElementById('mobile-search-btn');
+        const resetSearchBtn = document.getElementById('reset-search-btn');
+        const searchResultNotice = document.getElementById('search-result-notice');
+        const resultCount = document.getElementById('result-count');
+        const productCards = document.querySelectorAll('.product-card');
+        const noResult = document.getElementById('no-result');
+        const productGrid = document.getElementById('product-grid');
+
+        // 统一搜索执行函数
+        function executeSearch(searchTerm) {
+            const activeFilterBtn = document.querySelector('.filter-btn.bg-primary');
+            const currentFilter = activeFilterBtn ? activeFilterBtn.getAttribute('data-filter') : 'all';
+            let visibleCount = 0;
+
+            // 隐藏无结果提示
+            noResult.classList.add('hidden');
+            productGrid.classList.remove('opacity-50');
+
+            // 遍历商品卡片进行模糊匹配
+            productCards.forEach(card => {
+                const cardTitle = card.getAttribute('data-title').toLowerCase();
+                const cardCategories = card.getAttribute('data-categories');
+                const matchesSearch = !searchTerm || cardTitle.includes(searchTerm);
+                const matchesFilter = currentFilter === 'all' || cardCategories.includes(currentFilter);
+
+                if (matchesSearch && matchesFilter) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            // 显示搜索结果信息
+            searchResultNotice.classList.remove('hidden');
+            resetSearchBtn.classList.remove('hidden');
+
+            // 更新结果计数文本
+            const activeFilterText = activeFilterBtn ? activeFilterBtn.textContent : '全部';
+            resultCount.textContent = `找到 ${visibleCount} 件与"${searchTerm}"相关的商品（${activeFilterText}）`;
+
+            // 显示无结果提示（如果没有匹配项）
+            if (visibleCount === 0) {
+                noResult.classList.remove('hidden');
+                productGrid.classList.add('opacity-50');
+            }
+
+            // 滚动到商品列表区域
+            document.getElementById('collection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // 桌面端搜索按钮点击事件
+        desktopSearchBtn.addEventListener('click', () => {
+            const searchTerm = desktopSearchInput.value.trim().toLowerCase();
+            if (searchTerm) {
+                executeSearch(searchTerm);
+                // 同步移动端搜索框值（保持一致性）
+                mobileSearchInput.value = searchTerm;
+            }
+        });
+
+        // 移动端搜索按钮点击事件
+        mobileSearchBtn.addEventListener('click', () => {
+            const searchTerm = mobileSearchInput.value.trim().toLowerCase();
+            if (searchTerm) {
+                executeSearch(searchTerm);
+                // 同步桌面端搜索框值（保持一致性）
+                desktopSearchInput.value = searchTerm;
+            }
+        });
+
+        // 回车键触发搜索
+        [desktopSearchInput, mobileSearchInput].forEach(input => {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const searchTerm = input.value.trim().toLowerCase();
+                    if (searchTerm) {
+                        executeSearch(searchTerm);
+                        // 同步另一个搜索框的值
+                        const otherInput = input === desktopSearchInput ? mobileSearchInput : desktopSearchInput;
+                        otherInput.value = searchTerm;
+                    }
+                }
+            });
+        });
+
+        // 重置搜索功能
+        resetSearchBtn.addEventListener('click', () => {
+            // 清空搜索框
+            desktopSearchInput.value = '';
+            mobileSearchInput.value = '';
+
+            // 隐藏搜索相关提示
+            searchResultNotice.classList.add('hidden');
+            resetSearchBtn.classList.add('hidden');
+            noResult.classList.add('hidden');
+            productGrid.classList.remove('opacity-50');
+
+            // 重置筛选按钮到"全部"
+            const allFilterBtn = document.querySelector('.filter-btn[data-filter="all"]');
+            if (allFilterBtn) {
+                allFilterBtn.click(); // 触发全部筛选，显示所有商品
+            }
+        });
+    </script>
+</body>
+</html>
